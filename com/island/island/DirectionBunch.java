@@ -1,6 +1,4 @@
-package island;
-
-import island.Direction;
+package com.island.island;
 
 public enum DirectionBunch {
     TOP_LEFT_EDGE(Direction.RIGHT, Direction.BOTTOM),
