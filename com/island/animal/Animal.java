@@ -1,12 +1,22 @@
-package com.island.animals;
+package com.island.animal;
 
 import com.island.island.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal implements Movable {
     public final int id;
-    static public AnimalBase base;
+    public final AnimalBase base;
     public boolean moved = false;
+
+    public Animal(int id, AnimalBase base) {
+        this.id = id;
+        this.base = base;
+    }
+
+    @Override
+    public void resetMove() {
+        moved = false;
+    }
 
     @Override
     public Location move(Location fromLocation, Island island) {
@@ -35,10 +45,5 @@ public abstract class Animal implements Movable {
     @Override
     public String toString() {
         return base.icon + id;
-    }
-
-    public Animal(int id, AnimalBase base) {
-        this.id = id;
-        this.base = base;
     }
 }

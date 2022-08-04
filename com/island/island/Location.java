@@ -1,18 +1,22 @@
 package com.island.island;
 
-
-import com.island.animals.Animal;
-import com.island.animals.AnimalBase;
-import com.island.animals.Herbivore;
-import com.island.animals.herbivores.Horse;
-
+import com.island.animal.Animal;
+import com.island.animal.AnimalAlreadyExistException;
+import com.island.animal.AnimalBase;
+import com.island.animal.AnimalClass;
+import com.island.animal.herbivore.Herbivore;
+import com.island.animal.herbivore.Horse;
+import com.island.animal.predator.Predator;
+import com.island.animal.predator.Wolf;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class Location {
     public final Coords coords;
     public final HashMap<String, ArrayList<Herbivore>> herbivoresMap = new HashMap<>();
+    public final HashMap<String, ArrayList<Predator>> predatorsMap = new HashMap<>();
     private final DirectionBunch availableDirections;
 
     public Location(Coords coords, int animalId) {
@@ -46,40 +50,74 @@ public class Location {
 
 //        todo random filling after all features
         for (AnimalBase value : AnimalBase.values()) {
-            ArrayList<Herbivore> list = new ArrayList<>();
-
-            if (animalId < 4) {
+//            todo method with generics ???
+            if(value.animalClass == AnimalClass.HERBIVORE) {
+                ArrayList<Herbivore> list = new ArrayList<>();
                 list.add(new Horse(animalId, AnimalBase.Horse));
+                herbivoresMap.put(value.kind, list);
+            } else {
+                ArrayList<Predator> list = new ArrayList<>();
+                list.add(new Wolf(animalId, AnimalBase.Wolf));
+                predatorsMap.put(value.kind, list);
             }
-
-            herbivoresMap.put(value.kind, list);
         }
     }
 
     public boolean hasFreeSpace(Animal animal) {
-        ArrayList<? extends Animal> list = herbivoresMap.get(animal.base.kind);
+        AnimalBase animalBase = animal.base;
+        ArrayList<? extends Animal> list = animalBase.animalClass == AnimalClass.HERBIVORE ?
+                herbivoresMap.get(animalBase.kind) : predatorsMap.get(animalBase.kind);
 
-        return list.size() < animal.base.maxOnLocation || list.contains(animal);
+        return list.size() < animalBase.maxOnLocation || list.contains(animal);
     }
 
     public DirectionBunch getAvailableDirections() {
         return availableDirections;
     }
-
-    public void forEachHerbivoreKindList(Consumer<ArrayList<Herbivore>> consumer) {
-//        maybe stream ?
-        herbivoresMap.forEach((key, value) -> consumer.accept(value));
-
+    public Stream<Herbivore> herbivoreStream() {
+        return  herbivoresMap.values().stream().flatMap(List::stream);
+    }
+    public Stream<Predator> predatorStream() {
+        return  predatorsMap.values().stream().flatMap(List::stream);
+    }
+    public Stream<Animal> animalsStream() {
+        return Stream.concat(
+                herbivoreStream(),
+                predatorStream()
+        );
     }
 
-    public void forEachHerbivore(Consumer<Herbivore> consumer) {
-        forEachHerbivoreKindList(list -> list.forEach(consumer));
+    public Stream<ArrayList<? extends Animal>> animalListByKindStream() {
+        return Stream.concat(
+            herbivoresMap.values().stream(),
+            predatorsMap.values().stream()
+        );
+    }
+
+    public void addAnimal(Animal animal) {
+        String animalKind = animal.base.kind;
+
+        if(animal instanceof Herbivore) {
+            if(herbivoresMap.get(animalKind).contains(animal)) {
+                throw new AnimalAlreadyExistException();
+            }
+
+            herbivoresMap.get(animalKind).add((Herbivore) animal);
+        }
+
+        if(animal instanceof Predator) {
+            if(predatorsMap.get(animalKind).contains(animal)) {
+                throw new AnimalAlreadyExistException();
+            }
+
+            predatorsMap.get(animalKind).add((Predator) animal);
+        }
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        forEachHerbivore(herbivore -> stringBuilder.append(herbivore).append(" "));
+        animalsStream().forEach(animal -> stringBuilder.append(animal).append(" "));
         return stringBuilder.toString();
     }
 }

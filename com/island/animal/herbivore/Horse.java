@@ -1,7 +1,6 @@
-package com.island.animals.herbivores;
+package com.island.animal.herbivore;
 
-import com.island.animals.AnimalBase;
-import com.island.animals.Herbivore;
+import com.island.animal.AnimalBase;
 
 public class Horse extends Herbivore {
     public Horse(int id, AnimalBase kind) {

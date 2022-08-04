@@ -1,13 +1,13 @@
 package com.island.island;
 
-import com.island.animals.Herbivore;
-
-import java.util.ArrayList;
+import com.island.animal.Animal;
+import com.island.animal.AnimalAlreadyExistException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class Island {
     public static final int WIDTH = 3;
@@ -28,12 +28,8 @@ public class Island {
         return area[coords.x][coords.y];
     }
 
-    public void forEachLocation(Consumer<Location> func) {
-        for (Location[] locations : area) {
-            for (Location location : locations) {
-                func.accept(location);
-            }
-        }
+    public Stream<Location> locationStream() {
+        return Arrays.stream(area).flatMap(Arrays::stream);
     }
 
     public void print() {
@@ -80,32 +76,31 @@ public class Island {
     }
 
     private void moveAnimals() {
-//        todo not only for herbivore
-        forEachLocation(location -> {
-            location.forEachHerbivoreKindList(list -> {
-                Iterator<Herbivore> iterator = list.iterator();
+        locationStream().forEach(location -> {
+            location.animalListByKindStream().forEach(list -> {
+                Iterator<? extends Animal> iterator = list.iterator();
 
                 while (iterator.hasNext()) {
-                    Herbivore herbivore = iterator.next();
-                    if (herbivore.moved) continue;
+                    Animal animal = iterator.next();
+                    if (animal.moved) continue;
 
-                    Location newLocation = herbivore.move(location, this);
-                    ArrayList<Herbivore> animalKindList = newLocation.herbivoresMap.get(herbivore.base.kind);
+                    Location newLocation = animal.move(location, this);
 
-                    if (!animalKindList.contains(herbivore)) {
-                        animalKindList.add(herbivore);
+                    try {
+                        newLocation.addAnimal(animal);
                         iterator.remove();
-                    } else {
-                        System.out.println("start and end equals");
+                    } catch (AnimalAlreadyExistException e) {
+                        System.out.println(e.getMessage());
                     }
 
-                    herbivore.moved = true;
+                    animal.moved = true;
                 }
             });
         });
 
-        forEachLocation(location -> {
-            location.forEachHerbivore(herbivore -> herbivore.moved = false);
-        });
+// todo method reset
+        locationStream()
+            .flatMap(Location::animalsStream)
+            .forEach(Animal::resetMove);
     }
 }

@@ -1,4 +1,4 @@
-package com.island.animals;
+package com.island.animal;
 
 public enum AnimalClass {
     HERBIVORE, PREDATOR
