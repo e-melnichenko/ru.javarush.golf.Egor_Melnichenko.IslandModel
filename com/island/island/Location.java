@@ -5,6 +5,8 @@ import com.island.animal.herbivore.Herbivore;
 import com.island.animal.herbivore.Horse;
 import com.island.animal.predator.Predator;
 import com.island.animal.predator.Wolf;
+import com.island.vegetation.Vegetation;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +17,7 @@ public class Location {
     public final HashMap<AnimalKind, ArrayList<Herbivore>> herbivoresMap = new HashMap<>();
     public final HashMap<AnimalKind, ArrayList<Predator>> predatorsMap = new HashMap<>();
     private final DirectionBunch availableDirections;
+    private final Vegetation vegetation;
 
     public Location(Coords coords, int animalId) {
         this.coords = coords;
@@ -45,6 +48,8 @@ public class Location {
             availableDirections = DirectionBunch.ALL;
         }
 
+        vegetation = new Vegetation();
+
 //        todo random filling after all features
         for (AnimalBase value : AnimalBase.values()) {
 //            for dev
@@ -56,11 +61,11 @@ public class Location {
 //                }
                 herbivoresMap.put(value.kind, list);
             } else {
-                ArrayList<Predator> list = new ArrayList<>();
-//                if(animalId == 1) {
-                    list.add(new Wolf(animalId, AnimalBase.Wolf));
-//                }
-                predatorsMap.put(value.kind, list);
+//                ArrayList<Predator> list = new ArrayList<>();
+////                if(animalId == 1) {
+//                    list.add(new Wolf(animalId, AnimalBase.Wolf));
+////                }
+//                predatorsMap.put(value.kind, list);
             }
         }
     }
@@ -124,10 +129,17 @@ public class Location {
 //            todo herbivore eat plant
         });
     }
+    public void vegetationGrow() {
+        vegetation.grow();
+    }
+    public void feedHerbivores() {
+        herbivoreStream().forEach(herbivore -> vegetation.feed(herbivore));
+    }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(vegetation).append(" ");
         animalsStream().forEach(animal -> stringBuilder.append(animal).append(" "));
         return stringBuilder.toString();
     }

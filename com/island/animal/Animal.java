@@ -7,11 +7,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Animal implements Movable {
     public final int id;
     public final AnimalBase base;
+    public float satiety;
     public boolean moved = false;
 
     public Animal(int id, AnimalBase base) {
         this.id = id;
         this.base = base;
+        this.satiety = base.satietyLimit;
     }
 
 //    public void die(Location location) {
@@ -46,12 +48,14 @@ public abstract class Animal implements Movable {
             }
         }
 
+        float satietyRes = satiety - base.satietyLimit / 6;
+        satiety = satietyRes <= 0 ? 0 : satietyRes;
         return result;
     }
 
 
     @Override
     public String toString() {
-        return base.icon + id;
+        return base.icon + id + "S:\u001B[32m" + satiety + "\u001B[0m";
     }
 }

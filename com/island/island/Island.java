@@ -36,7 +36,7 @@ public class Island {
     public void print() {
         for (int y = area.length - 1; y >= 0; y--) {
             for (int x = 0; x < area[y].length; x++) {
-                System.out.print("\033[0;32m" + x + ":" + y + " " + "\033[0m" + area[x][y] + " ");
+                System.out.print("\u001B[31m" + x + ":" + y + " " + "\033[0m" + area[x][y] + " ");
                 if (x == WIDTH - 1) {
                     System.out.println();
                 }
@@ -59,12 +59,23 @@ public class Island {
     public void testStart() {
         while (true) {
             try {
-//                todo God class or Runner ???
+//                todo God class or Runner or Runnable task ???
                 moveAnimals();
+                System.out.println("after move");
                 print();
+
+                growVegetation();
+                System.out.println("after vegetation grow");
+                print();
+
+                herbivoresFeed();
+                System.out.println("after herbivores feed");
+                print();
+
                 hunt();
-                System.out.println("After hunting");
+                System.out.println("after hunting");
                 print();
+
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -95,7 +106,7 @@ public class Island {
                         newLocation.addAnimal(animal);
                         iterator.remove();
                     } catch (AnimalAlreadyExistException e) {
-                        System.out.println(e.getMessage());
+//                        System.out.println(e.getMessage());
                     }
 
                     animal.moved = true;
@@ -110,5 +121,11 @@ public class Island {
     }
     private void hunt() {
         locationStream().forEach(Location::startHunting);
+    }
+    private void growVegetation() {
+        locationStream().forEach(Location::vegetationGrow);
+    }
+    private void herbivoresFeed() {
+        locationStream().forEach(Location::feedHerbivores);
     }
 }

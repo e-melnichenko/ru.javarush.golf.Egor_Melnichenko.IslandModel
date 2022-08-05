@@ -41,7 +41,7 @@ public abstract class Predator extends Animal implements CanHunt {
                     iterator.remove();
                     System.out.println(this + " eat " + victim);
                 } else {
-                    System.out.println("hunt failed: " + this);
+//                    System.out.println("hunt failed: " + this);
                 }
             }
         });
