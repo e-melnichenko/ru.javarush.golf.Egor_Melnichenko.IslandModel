@@ -1,9 +1,6 @@
 package com.island.island;
 
-import com.island.animal.Animal;
-import com.island.animal.AnimalAlreadyExistException;
-import com.island.animal.AnimalBase;
-import com.island.animal.AnimalClass;
+import com.island.animal.*;
 import com.island.animal.herbivore.Herbivore;
 import com.island.animal.herbivore.Horse;
 import com.island.animal.predator.Predator;
@@ -15,8 +12,8 @@ import java.util.stream.Stream;
 
 public class Location {
     public final Coords coords;
-    public final HashMap<String, ArrayList<Herbivore>> herbivoresMap = new HashMap<>();
-    public final HashMap<String, ArrayList<Predator>> predatorsMap = new HashMap<>();
+    public final HashMap<AnimalKind, ArrayList<Herbivore>> herbivoresMap = new HashMap<>();
+    public final HashMap<AnimalKind, ArrayList<Predator>> predatorsMap = new HashMap<>();
     private final DirectionBunch availableDirections;
 
     public Location(Coords coords, int animalId) {
@@ -50,14 +47,19 @@ public class Location {
 
 //        todo random filling after all features
         for (AnimalBase value : AnimalBase.values()) {
-//            todo method with generics ???
+//            for dev
+//            todo method with generics or single map for animals ???
             if(value.animalClass == AnimalClass.HERBIVORE) {
                 ArrayList<Herbivore> list = new ArrayList<>();
-                list.add(new Horse(animalId, AnimalBase.Horse));
+//                if(animalId == 1) {
+                    list.add(new Horse(animalId, AnimalBase.Horse));
+//                }
                 herbivoresMap.put(value.kind, list);
             } else {
                 ArrayList<Predator> list = new ArrayList<>();
-                list.add(new Wolf(animalId, AnimalBase.Wolf));
+//                if(animalId == 1) {
+                    list.add(new Wolf(animalId, AnimalBase.Wolf));
+//                }
                 predatorsMap.put(value.kind, list);
             }
         }
@@ -95,7 +97,7 @@ public class Location {
     }
 
     public void addAnimal(Animal animal) {
-        String animalKind = animal.base.kind;
+        AnimalKind animalKind = animal.base.kind;
 
         if(animal instanceof Herbivore) {
             if(herbivoresMap.get(animalKind).contains(animal)) {
@@ -112,6 +114,15 @@ public class Location {
 
             predatorsMap.get(animalKind).add((Predator) animal);
         }
+    }
+
+    public void startHunting() {
+        animalsStream().forEach(animal -> {
+            if(animal instanceof Predator) {
+                ((Predator) animal).hunt(this);
+            }
+//            todo herbivore eat plant
+        });
     }
 
     @Override

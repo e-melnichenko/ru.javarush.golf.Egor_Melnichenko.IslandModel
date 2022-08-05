@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 public class Island {
     public static final int WIDTH = 3;
     public static final int HEIGHT = 3;
+    public static final int MAX_CHANCE_BOUND = 101;
     private final Location[][] area;
     private int animalsCount = 0;
 
@@ -58,7 +59,11 @@ public class Island {
     public void testStart() {
         while (true) {
             try {
+//                todo God class or Runner ???
                 moveAnimals();
+                print();
+                hunt();
+                System.out.println("After hunting");
                 print();
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -102,5 +107,8 @@ public class Island {
         locationStream()
             .flatMap(Location::animalsStream)
             .forEach(Animal::resetMove);
+    }
+    private void hunt() {
+        locationStream().forEach(Location::startHunting);
     }
 }

@@ -1,5 +1,6 @@
 package com.island.animal;
 
+import com.island.animal.herbivore.Herbivore;
 import com.island.island.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,6 +14,13 @@ public abstract class Animal implements Movable {
         this.base = base;
     }
 
+//    public void die(Location location) {
+//        if(this instanceof Herbivore) {
+//            location.herbivoresMap.get(base.kind).remove(this);
+//            System.out.println("died: " + this);
+//        }
+//    }
+
     @Override
     public void resetMove() {
         moved = false;
@@ -20,7 +28,7 @@ public abstract class Animal implements Movable {
 
     @Override
     public Location move(Location fromLocation, Island island) {
-        System.out.println(this);
+//        System.out.println(this);
         Location result = fromLocation;
 
         for (int i = 0; i < base.speed; i++) {
@@ -29,12 +37,12 @@ public abstract class Animal implements Movable {
             CoordsDelta delta = directions[randomIndex].getDelta();
 
             Coords newCoords = result.coords.evaluate(delta);
-            System.out.println(result.coords.x + ":" + result.coords.y + "->" + newCoords.x + ":" + newCoords.y);
+//            System.out.println(result.coords.x + ":" + result.coords.y + "->" + newCoords.x + ":" + newCoords.y);
             Location newLocation = island.getLocation(newCoords);
             if(newLocation.hasFreeSpace(this)) {
                 result = newLocation;
             } else {
-                System.out.println("throttle - max on location");
+//                System.out.println("throttle - max on location");
             }
         }
 
