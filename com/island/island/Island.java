@@ -2,6 +2,8 @@ package com.island.island;
 
 import com.island.animal.Animal;
 import com.island.animal.AnimalAlreadyExistException;
+import com.island.animal.IdGenerator;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
@@ -14,15 +16,10 @@ public class Island {
     public static final int HEIGHT = 3;
     public static final int MAX_CHANCE_BOUND = 101;
     private final Location[][] area;
-    private int animalsCount = 0;
 
     public Island() {
         area = new Location[WIDTH][HEIGHT];
         generate();
-    }
-
-    public int getAnimalId() {
-        return ++animalsCount;
     }
 
     public Location getLocation(Coords coords) {
@@ -61,8 +58,12 @@ public class Island {
             try {
 //                todo God class or Runner or Runnable task ???
                 moveAnimals();
-//                System.out.println("after move");
-//                print();
+                System.out.println("after move");
+                print();
+
+                reproduction();
+                System.out.println("after reproduction");
+                print();
 
                 growVegetation();
 //                System.out.println("after vegetation grow");
@@ -73,12 +74,12 @@ public class Island {
 //                print();
 
                 hunt();
-                System.out.println("after hunting");
-                print();
+//                System.out.println("after hunting");
+//                print();
 
                 clear();
-                System.out.println("after clear");
-                print();
+//                System.out.println("after clear");
+//                print();
 
 // todo before move clear animals which haven't enough satiety for move
                 Thread.sleep(1000);
@@ -91,7 +92,7 @@ public class Island {
     private void generate() {
         for (int y = 0; y < area.length; y++) {
             for (int x = 0; x < area[y].length; x++) {
-                area[x][y] = new Location(new Coords(x, y), getAnimalId());
+                area[x][y] = new Location(new Coords(x, y), IdGenerator.get());
             }
         }
     }
@@ -140,5 +141,8 @@ public class Island {
     }
     private void clear() {
         locationStream().forEach(Location::clear);
+    }
+    private void reproduction() {
+        locationStream().forEach(Location::reproduction);
     }
 }

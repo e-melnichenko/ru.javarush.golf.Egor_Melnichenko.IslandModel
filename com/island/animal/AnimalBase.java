@@ -12,7 +12,8 @@ public enum AnimalBase {
             4,
             400F,
             20,
-            60F
+            60F,
+            10
     ),
     Wolf(
             AnimalClass.PREDATOR,
@@ -24,7 +25,8 @@ public enum AnimalBase {
             3,
             50F,
             30,
-            8F
+            8F,
+            10
     );
 
     public final AnimalClass animalClass;
@@ -36,8 +38,18 @@ public enum AnimalBase {
     public final int maxOnLocation;
     public final float satietyLimit;
     public final float wastedSatietyPerStep;
+    public final int reproductionChance;
 
-    AnimalBase(AnimalClass animalClass, AnimalKind kind, HashMap<AnimalKind, Integer> menu, String icon, int speed, float weight, int maxOnLocation, float satietyLimit) {
+    AnimalBase(
+            AnimalClass animalClass,
+            AnimalKind kind, HashMap<AnimalKind,
+            Integer> menu, String icon,
+            int speed,
+            float weight,
+            int maxOnLocation,
+            float satietyLimit,
+            int reproductionChance
+    ) {
         this.animalClass = animalClass;
         this.kind = kind;
         this.menu = menu;
@@ -47,5 +59,6 @@ public enum AnimalBase {
         this.maxOnLocation = maxOnLocation;
         this.satietyLimit = satietyLimit;
         this.wastedSatietyPerStep = satietyLimit / 6;
+        this.reproductionChance = reproductionChance;
     }
 }

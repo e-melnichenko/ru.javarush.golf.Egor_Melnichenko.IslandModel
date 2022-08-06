@@ -4,11 +4,10 @@ import com.island.animal.*;
 import com.island.animal.herbivore.Herbivore;
 import com.island.animal.herbivore.Horse;
 import com.island.animal.predator.Predator;
-import com.island.animal.predator.Wolf;
 import com.island.vegetation.Vegetation;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -54,16 +53,16 @@ public class Location {
         for (AnimalBase value : AnimalBase.values()) {
 //            for dev
 //            todo method with generics or single map for animals ???
-            if(value.animalClass == AnimalClass.HERBIVORE) {
+            if (value.animalClass == AnimalClass.HERBIVORE) {
                 ArrayList<Herbivore> list = new ArrayList<>();
-//                if(animalId == 1) {
+//                if(animalId < 4) {
                     list.add(new Horse(animalId, AnimalBase.Horse));
 //                }
                 herbivoresMap.put(value.kind, list);
             } else {
                 ArrayList<Predator> list = new ArrayList<>();
 //                if(animalId == 1) {
-                    list.add(new Wolf(animalId, AnimalBase.Wolf));
+//                list.add(new Wolf(animalId, AnimalBase.Wolf));
 //                }
                 predatorsMap.put(value.kind, list);
             }
@@ -81,6 +80,7 @@ public class Location {
     public DirectionBunch getAvailableDirections() {
         return availableDirections;
     }
+
     public ArrayList<? extends Animal> getAnimalListByKind(AnimalKind kind) {
         ArrayList<? extends Animal> animalList = herbivoresMap.get(kind);
         if (animalList == null) {
@@ -92,12 +92,15 @@ public class Location {
 
         return animalList;
     }
+
     public Stream<Herbivore> herbivoreStream() {
-        return  herbivoresMap.values().stream().flatMap(List::stream);
+        return herbivoresMap.values().stream().flatMap(List::stream);
     }
+
     public Stream<Predator> predatorStream() {
-        return  predatorsMap.values().stream().flatMap(List::stream);
+        return predatorsMap.values().stream().flatMap(List::stream);
     }
+
     public Stream<Animal> animalsStream() {
         return Stream.concat(
                 herbivoreStream(),
@@ -107,24 +110,24 @@ public class Location {
 
     public Stream<ArrayList<? extends Animal>> animalListByKindStream() {
         return Stream.concat(
-            herbivoresMap.values().stream(),
-            predatorsMap.values().stream()
+                herbivoresMap.values().stream(),
+                predatorsMap.values().stream()
         );
     }
 
     public void addAnimal(Animal animal) {
         AnimalKind animalKind = animal.base.kind;
 
-        if(animal instanceof Herbivore) {
-            if(herbivoresMap.get(animalKind).contains(animal)) {
+        if (animal instanceof Herbivore) {
+            if (herbivoresMap.get(animalKind).contains(animal)) {
                 throw new AnimalAlreadyExistException();
             }
 
             herbivoresMap.get(animalKind).add((Herbivore) animal);
         }
 
-        if(animal instanceof Predator) {
-            if(predatorsMap.get(animalKind).contains(animal)) {
+        if (animal instanceof Predator) {
+            if (predatorsMap.get(animalKind).contains(animal)) {
                 throw new AnimalAlreadyExistException();
             }
 
@@ -135,17 +138,20 @@ public class Location {
     public void startHunting() {
 //        todo CanHunt for herbivores
         animalsStream().forEach(animal -> {
-            if(animal instanceof CanHunt && !animal.isDead) {
+            if (animal instanceof CanHunt && !animal.isDead) {
                 ((Predator) animal).hunt(this);
             }
         });
     }
+
     public void vegetationGrow() {
         vegetation.grow();
     }
+
     public void feedHerbivores() {
         herbivoreStream().forEach(herbivore -> vegetation.feed(herbivore));
     }
+
     public void clear() {
         Consumer<ArrayList<? extends Animal>> consumer = animals -> animals.removeIf(
                 animal -> animal.isDead || animal.satiety < animal.base.wastedSatietyPerStep
@@ -153,6 +159,43 @@ public class Location {
 
         herbivoresMap.values().forEach(consumer);
         predatorsMap.values().forEach(consumer);
+    }
+
+    public void reproduction() {
+//        todo remove duplicate. Generics problem
+        herbivoresMap.values().forEach(list -> {
+            if (list.size() < 2) return;
+
+            int childrenCount = list.size() / 2;
+            Herbivore animalExample = list.get(0);
+            ThreadLocalRandom random = ThreadLocalRandom.current();
+            for (int i = 0; i < childrenCount; i++) {
+                if(animalExample.base.reproductionChance < random.nextInt(Island.MAX_CHANCE_BOUND)) continue;
+                System.out.println("add");
+                list.add(tryToCreateNewAnimal(animalExample));
+            }
+        });
+
+        predatorsMap.values().forEach(list -> {
+            if (list.size() < 2) return;
+
+            int childrenCount = list.size() / 2;
+            for (int i = 0; i < childrenCount; i++) {
+                list.add(tryToCreateNewAnimal(list.get(0)));
+            }
+        });
+    }
+
+    public <T> T tryToCreateNewAnimal(T animalExample) {
+        try {
+            Class clazz = animalExample.getClass();
+            AnimalBase base = (AnimalBase) clazz.getField("base").get(animalExample);
+            return (T) clazz.getConstructor(int.class, AnimalBase.class).newInstance(IdGenerator.get(), base);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 NoSuchFieldException e) {
+            System.out.println(e.getLocalizedMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
