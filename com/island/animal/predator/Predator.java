@@ -6,9 +6,8 @@ import com.island.animal.AnimalKind;
 import com.island.animal.CanHunt;
 import com.island.island.Island;
 import com.island.island.Location;
-
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Predator extends Animal implements CanHunt {
@@ -18,33 +17,36 @@ public abstract class Predator extends Animal implements CanHunt {
 
     @Override
     public void hunt(Location location) {
-        this.base.menu.entrySet().forEach(entry -> {
+        outerloop:
+        for (Map.Entry<AnimalKind, Integer> entry : base.menu.entrySet()) {
 //            herbivores and predators into one map ???
-//            Set is shuffle!!!
             AnimalKind victimKind = entry.getKey();
             int successHuntChance = entry.getValue();
 
-            ArrayList<? extends Animal> animalList  = location.herbivoresMap.get(victimKind);
-            if(animalList == null) {
-                animalList = location.predatorsMap.get(victimKind);
-            }
-            if(animalList == null) {
-                throw new IllegalArgumentException("Вид " + victimKind + " не может существовать в локации");
-            }
+            ArrayList<? extends Animal> animalList = location.getAnimalListByKind(victimKind);
 
-//            todo replace iterator
-            Iterator<? extends Animal> iterator = animalList.iterator();
-            while(iterator.hasNext()) {
-                Animal victim = iterator.next();
+//            bad: hunt all
+            for (Animal victim : animalList) {
+                if(victim.isDead) continue;
+
                 boolean successHunt = successHuntChance >= ThreadLocalRandom.current().nextInt(Island.MAX_CHANCE_BOUND);
-                if(successHunt) {
-                    iterator.remove();
-                    System.out.println(this + " eat " + victim);
-                } else {
-//                    System.out.println("hunt failed: " + this);
+                if (!successHunt) continue;
+
+                eatAnimal(victim);
+                System.out.println(this + " eat " + victim);
+
+                if (satiety == base.satietyLimit) {
+                    System.out.println("loop exit: " + this);
+                    break outerloop;
                 }
             }
-        });
+        }
+    }
 
+    @Override
+    public void eatAnimal(Animal victim) {
+//        todo can eat dead animals
+        satiety = satiety + victim.base.weight < base.satietyLimit ? satiety + victim.base.weight : base.satietyLimit;
+        victim.isDead = true;
     }
 }

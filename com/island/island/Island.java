@@ -76,6 +76,11 @@ public class Island {
                 System.out.println("after hunting");
                 print();
 
+                removeDead();
+                System.out.println("after remove dead");
+                print();
+
+// todo before move clear animals which haven't enough satiety for move
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -94,11 +99,13 @@ public class Island {
     private void moveAnimals() {
         locationStream().forEach(location -> {
             location.animalListByKindStream().forEach(list -> {
+//                todo not good
                 Iterator<? extends Animal> iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     Animal animal = iterator.next();
-                    if (animal.moved) continue;
+//                    todo filter dead animals in the end of loop
+                    if (animal.moved || animal.isDead) continue;
 
                     Location newLocation = animal.move(location, this);
 
@@ -116,16 +123,22 @@ public class Island {
 
 // todo method reset
         locationStream()
-            .flatMap(Location::animalsStream)
-            .forEach(Animal::resetMove);
+                .flatMap(Location::animalsStream)
+                .forEach(Animal::resetMove);
     }
+
     private void hunt() {
         locationStream().forEach(Location::startHunting);
     }
+
     private void growVegetation() {
         locationStream().forEach(Location::vegetationGrow);
     }
+
     private void herbivoresFeed() {
         locationStream().forEach(Location::feedHerbivores);
+    }
+    private void removeDead() {
+        locationStream().forEach(Location::removeDead);
     }
 }

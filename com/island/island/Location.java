@@ -4,12 +4,11 @@ import com.island.animal.*;
 import com.island.animal.herbivore.Herbivore;
 import com.island.animal.herbivore.Horse;
 import com.island.animal.predator.Predator;
-import com.island.animal.predator.Wolf;
 import com.island.vegetation.Vegetation;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class Location {
@@ -61,11 +60,11 @@ public class Location {
 //                }
                 herbivoresMap.put(value.kind, list);
             } else {
-//                ArrayList<Predator> list = new ArrayList<>();
-////                if(animalId == 1) {
+                ArrayList<Predator> list = new ArrayList<>();
+//                if(animalId == 1) {
 //                    list.add(new Wolf(animalId, AnimalBase.Wolf));
-////                }
-//                predatorsMap.put(value.kind, list);
+//                }
+                predatorsMap.put(value.kind, list);
             }
         }
     }
@@ -80,6 +79,17 @@ public class Location {
 
     public DirectionBunch getAvailableDirections() {
         return availableDirections;
+    }
+    public ArrayList<? extends Animal> getAnimalListByKind(AnimalKind kind) {
+        ArrayList<? extends Animal> animalList = herbivoresMap.get(kind);
+        if (animalList == null) {
+            animalList = predatorsMap.get(kind);
+        }
+        if (animalList == null) {
+            throw new IllegalArgumentException("Вид " + kind + " не может существовать в локации");
+        }
+
+        return animalList;
     }
     public Stream<Herbivore> herbivoreStream() {
         return  herbivoresMap.values().stream().flatMap(List::stream);
@@ -122,11 +132,11 @@ public class Location {
     }
 
     public void startHunting() {
+//        todo CanHunt for herbivores
         animalsStream().forEach(animal -> {
-            if(animal instanceof Predator) {
+            if(animal instanceof CanHunt && !animal.isDead) {
                 ((Predator) animal).hunt(this);
             }
-//            todo herbivore eat plant
         });
     }
     public void vegetationGrow() {
@@ -134,6 +144,13 @@ public class Location {
     }
     public void feedHerbivores() {
         herbivoreStream().forEach(herbivore -> vegetation.feed(herbivore));
+    }
+    public void removeDead() {
+        Consumer<ArrayList<? extends Animal>> consumer =
+                animals -> animals.removeIf(animal -> animal.isDead);
+
+        herbivoresMap.values().forEach(consumer);
+        predatorsMap.values().forEach(consumer);
     }
 
     @Override

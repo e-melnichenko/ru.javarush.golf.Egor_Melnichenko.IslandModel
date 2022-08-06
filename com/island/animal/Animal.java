@@ -9,19 +9,13 @@ public abstract class Animal implements Movable {
     public final AnimalBase base;
     public float satiety;
     public boolean moved = false;
+    public boolean isDead = false;
 
     public Animal(int id, AnimalBase base) {
         this.id = id;
         this.base = base;
         this.satiety = base.satietyLimit;
     }
-
-//    public void die(Location location) {
-//        if(this instanceof Herbivore) {
-//            location.herbivoresMap.get(base.kind).remove(this);
-//            System.out.println("died: " + this);
-//        }
-//    }
 
     @Override
     public void resetMove() {
