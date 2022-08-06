@@ -35,6 +35,7 @@ public enum AnimalBase {
     public final float weight;
     public final int maxOnLocation;
     public final float satietyLimit;
+    public final float wastedSatietyPerStep;
 
     AnimalBase(AnimalClass animalClass, AnimalKind kind, HashMap<AnimalKind, Integer> menu, String icon, int speed, float weight, int maxOnLocation, float satietyLimit) {
         this.animalClass = animalClass;
@@ -45,5 +46,6 @@ public enum AnimalBase {
         this.weight = weight;
         this.maxOnLocation = maxOnLocation;
         this.satietyLimit = satietyLimit;
+        this.wastedSatietyPerStep = satietyLimit / 6;
     }
 }

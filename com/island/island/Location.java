@@ -4,6 +4,7 @@ import com.island.animal.*;
 import com.island.animal.herbivore.Herbivore;
 import com.island.animal.herbivore.Horse;
 import com.island.animal.predator.Predator;
+import com.island.animal.predator.Wolf;
 import com.island.vegetation.Vegetation;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +63,7 @@ public class Location {
             } else {
                 ArrayList<Predator> list = new ArrayList<>();
 //                if(animalId == 1) {
-//                    list.add(new Wolf(animalId, AnimalBase.Wolf));
+                    list.add(new Wolf(animalId, AnimalBase.Wolf));
 //                }
                 predatorsMap.put(value.kind, list);
             }
@@ -145,9 +146,10 @@ public class Location {
     public void feedHerbivores() {
         herbivoreStream().forEach(herbivore -> vegetation.feed(herbivore));
     }
-    public void removeDead() {
-        Consumer<ArrayList<? extends Animal>> consumer =
-                animals -> animals.removeIf(animal -> animal.isDead);
+    public void clear() {
+        Consumer<ArrayList<? extends Animal>> consumer = animals -> animals.removeIf(
+                animal -> animal.isDead || animal.satiety < animal.base.wastedSatietyPerStep
+        );
 
         herbivoresMap.values().forEach(consumer);
         predatorsMap.values().forEach(consumer);

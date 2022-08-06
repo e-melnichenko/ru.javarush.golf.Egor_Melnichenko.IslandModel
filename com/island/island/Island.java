@@ -61,23 +61,23 @@ public class Island {
             try {
 //                todo God class or Runner or Runnable task ???
                 moveAnimals();
-                System.out.println("after move");
-                print();
+//                System.out.println("after move");
+//                print();
 
                 growVegetation();
-                System.out.println("after vegetation grow");
-                print();
+//                System.out.println("after vegetation grow");
+//                print();
 
                 herbivoresFeed();
-                System.out.println("after herbivores feed");
-                print();
+//                System.out.println("after herbivores feed");
+//                print();
 
                 hunt();
                 System.out.println("after hunting");
                 print();
 
-                removeDead();
-                System.out.println("after remove dead");
+                clear();
+                System.out.println("after clear");
                 print();
 
 // todo before move clear animals which haven't enough satiety for move
@@ -138,7 +138,7 @@ public class Island {
     private void herbivoresFeed() {
         locationStream().forEach(Location::feedHerbivores);
     }
-    private void removeDead() {
-        locationStream().forEach(Location::removeDead);
+    private void clear() {
+        locationStream().forEach(Location::clear);
     }
 }

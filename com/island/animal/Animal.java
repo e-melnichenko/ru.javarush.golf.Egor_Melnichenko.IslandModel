@@ -42,7 +42,7 @@ public abstract class Animal implements Movable {
             }
         }
 
-        float satietyRes = satiety - base.satietyLimit / 6;
+        float satietyRes = satiety - base.wastedSatietyPerStep;
         satiety = satietyRes <= 0 ? 0 : satietyRes;
         return result;
     }
@@ -50,6 +50,12 @@ public abstract class Animal implements Movable {
 
     @Override
     public String toString() {
-        return base.icon + id + "S:\u001B[32m" + satiety + "\u001B[0m";
+        String res = base.icon + id + "S:\u001B[32m" + satiety;
+        if(isDead) {
+            res += "\u001B[35mD";
+        }
+
+        return res + "\u001B[0m";
+//        return base.icon + id + "S:\u001B[32m" + satiety + "\u001B[35mD:" + isDead +"\u001B[0m";
     }
 }
