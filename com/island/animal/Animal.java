@@ -1,20 +1,25 @@
 package com.island.animal;
 
+import com.island.IdGenerator;
 import com.island.animal.herbivore.Herbivore;
 import com.island.island.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Animal implements Movable {
+public abstract class Animal implements Movable, CanFeed {
     public final int id;
-    public final AnimalBase base;
+    public AnimalBase base;
     public float satiety;
     public boolean moved = false;
     public boolean isDead = false;
 
-    public Animal(int id, AnimalBase base) {
-        this.id = id;
+    public Animal(AnimalBase base) {
+        this.id = IdGenerator.get();
         this.base = base;
         this.satiety = base.satietyLimit;
+    }
+
+    public boolean isHungry() {
+        return satiety < base.satietyLimit;
     }
 
     @Override
@@ -38,7 +43,7 @@ public abstract class Animal implements Movable {
             if(newLocation.hasFreeSpace(this)) {
                 result = newLocation;
             } else {
-//                System.out.println("throttle - max on location");
+                System.out.println("throttle - max on location");
             }
         }
 

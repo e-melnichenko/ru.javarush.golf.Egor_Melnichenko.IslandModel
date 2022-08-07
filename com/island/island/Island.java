@@ -3,6 +3,9 @@ package com.island.island;
 import com.island.animal.Animal;
 import com.island.animal.AnimalAlreadyExistException;
 import com.island.IdGenerator;
+import com.island.animal.Movable;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
@@ -67,11 +70,15 @@ public class Island {
 //                System.out.println("after vegetation grow");
 //                print();
 
-                herbivoresFeed();
+                feed();
+//                System.out.println("after feed");
+//                print();
+
+//                herbivoresFeed();
 //                System.out.println("after herbivores feed");
 //                print();
 
-                hunt();
+//                hunt();
 //                System.out.println("after hunting");
 //                print();
 
@@ -90,35 +97,54 @@ public class Island {
     private void generate() {
         for (int y = 0; y < area.length; y++) {
             for (int x = 0; x < area[y].length; x++) {
-                area[x][y] = new Location(new Coords(x, y), IdGenerator.get());
+                area[x][y] = new Location(new Coords(x, y));
             }
         }
     }
 
     private void moveAnimals() {
+//        todo code smell
         locationStream().forEach(location -> {
-            location.animalListByKindStream().forEach(list -> {
-//                todo not good
-                Iterator<? extends Animal> iterator = list.iterator();
+            location.animalsMap.entrySet().forEach(entry -> {
+                ArrayList<Animal> newAnimalList = new ArrayList<>();
 
-                while (iterator.hasNext()) {
-                    Animal animal = iterator.next();
-//                    todo filter dead animals in the end of loop
-                    if (animal.moved || animal.isDead) continue;
-
+                entry.getValue().forEach(animal -> {
                     Location newLocation = animal.move(location, this);
-
-                    try {
+//                    compare by link is okay
+                    if(newLocation == location) {
+                        newAnimalList.add(animal);
+                    } else {
                         newLocation.addAnimal(animal);
-                        iterator.remove();
-                    } catch (AnimalAlreadyExistException e) {
-//                        System.out.println(e.getMessage());
                     }
-
                     animal.moved = true;
-                }
+                });
+
+                entry.setValue(newAnimalList);
             });
         });
+//        locationStream().forEach(location -> {
+//            location.animalListByKindStream().forEach(list -> {
+////                todo not good
+//                Iterator<? extends Animal> iterator = list.iterator();
+//
+//                while (iterator.hasNext()) {
+//                    Animal animal = iterator.next();
+////                    todo filter dead animals in the end of loop
+//                    if (animal.moved || animal.isDead) continue;
+//
+//                    Location newLocation = animal.move(location, this);
+//
+//                    try {
+//                        newLocation.addAnimal(animal);
+//                        iterator.remove();
+//                    } catch (AnimalAlreadyExistException e) {
+////                        System.out.println(e.getMessage());
+//                    }
+//
+//                    animal.moved = true;
+//                }
+//            });
+//        });
 
 // todo method reset
         locationStream()
@@ -127,7 +153,7 @@ public class Island {
     }
 
     private void hunt() {
-        locationStream().forEach(Location::startHunting);
+//        locationStream().forEach(Location::startHunting);
     }
 
     private void growVegetation() {
@@ -135,12 +161,16 @@ public class Island {
     }
 
     private void herbivoresFeed() {
-        locationStream().forEach(Location::feedHerbivores);
+//        locationStream().forEach(Location::feedHerbivores);
     }
     private void clear() {
         locationStream().forEach(Location::clear);
     }
     private void reproduction() {
         locationStream().forEach(Location::reproduction);
+    }
+
+    private void feed() {
+        locationStream().forEach(Location::feed);
     }
 }

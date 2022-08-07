@@ -1,13 +1,17 @@
 package com.island.animal;
 
+import com.island.island.Caterpillar;
+
 import java.util.HashMap;
 
 // into annotation ???
 public enum AnimalBase {
+//    todo uppercase
     Horse(
-            AnimalClass.HERBIVORE,
             AnimalKind.HORSE,
-            new HashMap<>(),
+            new HashMap<>() {{
+                put(AnimalKind.BOA, 100);
+            }},
             "\uD83D\uDC0E",
             4,
             400F,
@@ -16,10 +20,9 @@ public enum AnimalBase {
             10
     ),
     Wolf(
-            AnimalClass.PREDATOR,
             AnimalKind.WOLF,
-            new HashMap<>(){{
-               put(AnimalKind.HORSE, 10);
+            new HashMap<>() {{
+                put(AnimalKind.HORSE, 10);
             }},
             "\uD83D\uDC3A",
             3,
@@ -29,20 +32,40 @@ public enum AnimalBase {
             10
     ),
     Boa(
-            AnimalClass.PREDATOR,
             AnimalKind.BOA,
-            new HashMap<>(){{
-               put(AnimalKind.WOLF, 100);
+            new HashMap<>() {{
+                put(AnimalKind.WOLF, 100);
             }},
             "\uD83D\uDC0D",
             3,
-            50F,
+            5F,
             30,
             8F,
             100
+    ),
+    Mouse(
+            AnimalKind.MOUSE,
+            new HashMap<>() {{
+                put(AnimalKind.CATERPILLAR, 90);
+            }},
+            "\uD83D\uDC01",
+            1,
+            0.05F,
+            500,
+            0.01F,
+            100
+    ),
+    Caterpillar(
+            AnimalKind.CATERPILLAR,
+            new HashMap<>(),
+            "\uD83D\uDC1B",
+            0,
+            0.01F,
+            1000,
+            0F,
+            10
     );
 
-    public final AnimalClass animalClass;
     public final AnimalKind kind;
     public final HashMap<AnimalKind, Integer> menu;
     public final String icon;
@@ -54,7 +77,6 @@ public enum AnimalBase {
     public final int reproductionChance;
 
     AnimalBase(
-            AnimalClass animalClass,
             AnimalKind kind, HashMap<AnimalKind,
             Integer> menu, String icon,
             int speed,
@@ -63,7 +85,6 @@ public enum AnimalBase {
             float satietyLimit,
             int reproductionChance
     ) {
-        this.animalClass = animalClass;
         this.kind = kind;
         this.menu = menu;
         this.icon = icon;
