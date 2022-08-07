@@ -1,5 +1,7 @@
 package com.island.island;
 
+import com.island.Chance;
+import com.island.IdGenerator;
 import com.island.animal.*;
 import com.island.animal.herbivore.Herbivore;
 import com.island.animal.herbivore.Horse;
@@ -49,14 +51,14 @@ public class Location {
 
         vegetation = new Vegetation();
 
-//        todo random filling after all features
+//        todo random filling (after all features)
         for (AnimalBase value : AnimalBase.values()) {
 //            for dev
 //            todo method with generics or single map for animals ???
             if (value.animalClass == AnimalClass.HERBIVORE) {
                 ArrayList<Herbivore> list = new ArrayList<>();
 //                if(animalId < 4) {
-                    list.add(new Horse(animalId, AnimalBase.Horse));
+//                    list.add(new Horse(animalId, AnimalBase.Horse));
 //                }
                 herbivoresMap.put(value.kind, list);
             } else {
@@ -168,9 +170,8 @@ public class Location {
 
             int childrenCount = list.size() / 2;
             Herbivore animalExample = list.get(0);
-            ThreadLocalRandom random = ThreadLocalRandom.current();
             for (int i = 0; i < childrenCount; i++) {
-                if(animalExample.base.reproductionChance < random.nextInt(Island.MAX_CHANCE_BOUND)) continue;
+                if(Chance.isSuccess(animalExample.base.reproductionChance)) continue;
                 System.out.println("add");
                 list.add(tryToCreateNewAnimal(animalExample));
             }

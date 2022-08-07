@@ -2,8 +2,7 @@ package com.island.island;
 
 import com.island.animal.Animal;
 import com.island.animal.AnimalAlreadyExistException;
-import com.island.animal.IdGenerator;
-
+import com.island.IdGenerator;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
@@ -14,7 +13,6 @@ import java.util.stream.Stream;
 public class Island {
     public static final int WIDTH = 3;
     public static final int HEIGHT = 3;
-    public static final int MAX_CHANCE_BOUND = 101;
     private final Location[][] area;
 
     public Island() {

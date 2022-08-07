@@ -1,5 +1,6 @@
 package com.island.animal.predator;
 
+import com.island.Chance;
 import com.island.animal.Animal;
 import com.island.animal.AnimalBase;
 import com.island.animal.AnimalKind;
@@ -29,8 +30,7 @@ public abstract class Predator extends Animal implements CanHunt {
             for (Animal victim : animalList) {
                 if(victim.isDead) continue;
 
-                boolean successHunt = successHuntChance >= ThreadLocalRandom.current().nextInt(Island.MAX_CHANCE_BOUND);
-                if (!successHunt) continue;
+                if (!Chance.isSuccess(successHuntChance)) continue;
 
                 eatAnimal(victim);
                 System.out.println(this + " eat " + victim);

@@ -1,4 +1,4 @@
-package com.island.animal;
+package com.island;
 
 public class IdGenerator {
     private static int id = 1;
