@@ -27,6 +27,19 @@ public enum AnimalBase {
             30,
             8F,
             10
+    ),
+    Boa(
+            AnimalClass.PREDATOR,
+            AnimalKind.BOA,
+            new HashMap<>(){{
+               put(AnimalKind.WOLF, 100);
+            }},
+            "\uD83D\uDC0D",
+            3,
+            50F,
+            30,
+            8F,
+            100
     );
 
     public final AnimalClass animalClass;

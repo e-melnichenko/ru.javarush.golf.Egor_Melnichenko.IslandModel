@@ -4,8 +4,9 @@ import com.island.Chance;
 import com.island.IdGenerator;
 import com.island.animal.*;
 import com.island.animal.herbivore.Herbivore;
-import com.island.animal.herbivore.Horse;
+import com.island.animal.predator.Boa;
 import com.island.animal.predator.Predator;
+import com.island.animal.predator.Wolf;
 import com.island.vegetation.Vegetation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -63,9 +64,15 @@ public class Location {
                 herbivoresMap.put(value.kind, list);
             } else {
                 ArrayList<Predator> list = new ArrayList<>();
-//                if(animalId == 1) {
-//                list.add(new Wolf(animalId, AnimalBase.Wolf));
-//                }
+//                    System.out.println("animalid: " + animalId);
+                if(animalId == 1) {
+                    if(value == AnimalBase.Boa) {
+                        list.add(new Boa(animalId, value));
+                    }
+                    if(value == AnimalBase.Wolf) {
+                        list.add(new Wolf(animalId, AnimalBase.Wolf));
+                    }
+                }
                 predatorsMap.put(value.kind, list);
             }
         }
@@ -172,8 +179,9 @@ public class Location {
             Herbivore animalExample = list.get(0);
             for (int i = 0; i < childrenCount; i++) {
                 if(Chance.isSuccess(animalExample.base.reproductionChance)) continue;
-                System.out.println("add");
-                list.add(tryToCreateNewAnimal(animalExample));
+                Herbivore newHerbivore = tryToCreateNewAnimal(animalExample);
+                System.out.println("was born: " + newHerbivore);
+                list.add(newHerbivore);
             }
         });
 
@@ -181,8 +189,12 @@ public class Location {
             if (list.size() < 2) return;
 
             int childrenCount = list.size() / 2;
+            Predator animalExample = list.get(0);
             for (int i = 0; i < childrenCount; i++) {
-                list.add(tryToCreateNewAnimal(list.get(0)));
+                if(Chance.isSuccess(animalExample.base.reproductionChance)) continue;
+                Predator newPredator = tryToCreateNewAnimal(animalExample);
+                System.out.println("was born: " + newPredator);
+                list.add(newPredator);
             }
         });
     }
