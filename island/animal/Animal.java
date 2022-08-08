@@ -28,8 +28,7 @@ public abstract class Animal implements Movable, CanFeed {
     }
 
     @Override
-    public Location move(Location fromLocation, Island island) {
-//        System.out.println(this);
+    public Location move(Location fromLocation) {
         Location result = fromLocation;
 
         for (int i = 0; i < base.speed; i++) {
@@ -38,14 +37,16 @@ public abstract class Animal implements Movable, CanFeed {
             CoordsDelta delta = directions[randomIndex].getDelta();
 
             Coords newCoords = result.coords.evaluate(delta);
-//            System.out.println(result.coords.x + ":" + result.coords.y + "->" + newCoords.x + ":" + newCoords.y);
             Location newLocation = Island.AREA.getLocation(newCoords);
             if(newLocation.hasFreeSpace(this)) {
                 result = newLocation;
             } else {
-                System.out.println("throttle - max on location");
+//                System.out.println("throttle - max on location");
             }
         }
+
+
+//        System.out.println(this + " " +  fromLocation.coords.x + ":" + fromLocation.coords.y + "->" + result.coords.x + ":" + result.coords.y);
 
         float satietyRes = satiety - base.wastedSatietyPerStep;
         satiety = satietyRes <= 0 ? 0 : satietyRes;
@@ -56,11 +57,11 @@ public abstract class Animal implements Movable, CanFeed {
     @Override
     public String toString() {
         String res = base.icon + id + "S:\u001B[32m" + satiety;
+
         if(isDead) {
             res += "\u001B[35mD";
         }
 
         return res + "\u001B[0m";
-//        return base.icon + id + "S:\u001B[32m" + satiety + "\u001B[35mD:" + isDead +"\u001B[0m";
     }
 }

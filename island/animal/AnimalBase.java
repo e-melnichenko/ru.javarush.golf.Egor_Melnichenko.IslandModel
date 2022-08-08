@@ -49,7 +49,7 @@ public enum AnimalBase {
             "\uD83D\uDC01",
             1,
             0.05F,
-            500,
+            5,
             0.01F,
             100
     ),

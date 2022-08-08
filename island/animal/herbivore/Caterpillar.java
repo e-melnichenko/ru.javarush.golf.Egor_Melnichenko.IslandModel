@@ -1,6 +1,5 @@
-package island.island;
+package island.animal.herbivore;
 
-import island.animal.herbivore.Herbivore;
 import island.animal.AnimalBase;
 
 public class Caterpillar extends Herbivore {

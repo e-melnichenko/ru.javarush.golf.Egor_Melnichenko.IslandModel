@@ -1,6 +1,5 @@
 package island.island;
 
-
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -13,7 +12,6 @@ public class Area {
         this.width = width;
         this.height = height;
         this.value = new Location[width][height];
-        generate();
     }
 
     public Location getLocation(Coords coords) {
@@ -24,7 +22,7 @@ public class Area {
         return Arrays.stream(value).flatMap(Arrays::stream);
     }
 
-    private void generate() {
+    public void generate() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 value[x][y] = new Location(new Coords(x, y));

@@ -4,6 +4,6 @@ import island.island.Island;
 import island.island.Location;
 
 public interface Movable {
-    Location move(Location fromLocation, Island island);
+    Location move(Location fromLocation);
     void resetMove();
 }
