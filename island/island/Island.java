@@ -11,9 +11,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 
 public class Island {
-//    todo move to config
-    public static final int WIDTH = 3;
-    public static final int HEIGHT = 4;
+    public static final int WIDTH = 100;
+    public static final int HEIGHT = 20;
     public static final Area AREA = new Area(WIDTH, HEIGHT);
 
     public Island() {
@@ -27,7 +26,7 @@ public class Island {
         BiConsumer<HashMap<AnimalBase, Integer>, AnimalBase> accumulator =
                 (animalKindToInteger, item) -> {
                     animalKindToInteger.merge(item, 1, Integer::sum);
-        };
+                };
         BiConsumer<HashMap<AnimalBase, Integer>, HashMap<AnimalBase, Integer>> combiner =
                 HashMap::putAll;
 
@@ -43,8 +42,12 @@ public class Island {
                 .collect(supplier, accumulator, combiner);
 
         System.out.println("\uD83C\uDF3F: " + vegetationCount);
-        statsMap.forEach((key, value) -> System.out.print(key.icon + ": " + value + " "));
-        System.out.println("\n----------------------------");
+        statsMap.forEach((key, value) -> System.out.print(key.icon + key.kind + ": " + value + "/" + key.maxOnLocation * AREA.width * AREA.height + " "));
+        System.out.println();
+    }
+
+    public void testPrint() {
+        forEachLocation(System.out::println);
     }
 
     public void start() {
@@ -89,6 +92,7 @@ public class Island {
     private void clear() {
         forEachLocation(Location::clear);
     }
+
     private void reproduction() {
         forEachLocation(Location::reproduction);
     }
@@ -96,6 +100,7 @@ public class Island {
     private void feed() {
         forEachLocation(Location::feed);
     }
+
     private void forEachLocation(Consumer<Location> consumer) {
         AREA.locationStream().forEach(consumer);
     }

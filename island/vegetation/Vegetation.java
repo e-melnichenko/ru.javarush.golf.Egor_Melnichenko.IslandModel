@@ -12,11 +12,7 @@ public class Vegetation {
     }
 
     public void grow() {
-        if(value + GROW_STEP >= MAX) {
-            value = MAX;
-        } else {
-            value += GROW_STEP;
-        }
+        value = Math.min(MAX, value + GROW_STEP);
     }
 
     @Override

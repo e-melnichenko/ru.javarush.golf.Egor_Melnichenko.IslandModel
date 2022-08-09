@@ -21,7 +21,7 @@ public enum AnimalBase {
             50F,
             30,
             8F,
-            10
+            20
     ),
     BOA(
             AnimalKind.BOA,
@@ -36,7 +36,7 @@ public enum AnimalBase {
             15F,
             30,
             3F,
-            10
+            30
     ),
     FOX(
             AnimalKind.FOX,
@@ -51,7 +51,7 @@ public enum AnimalBase {
             8F,
             30,
             2F,
-            10
+            30
     ),
     BEAR(
             AnimalKind.BEAR,
@@ -72,7 +72,7 @@ public enum AnimalBase {
             500F,
             5,
             80F,
-            10
+            30
     ),
     EAGLE(
             AnimalKind.EAGLE,
@@ -87,7 +87,7 @@ public enum AnimalBase {
             6F,
             20,
             1F,
-            10
+            30
     ),
     HORSE(
             AnimalKind.HORSE,
@@ -223,7 +223,7 @@ public enum AnimalBase {
         this.weight = weight;
         this.maxOnLocation = maxOnLocation;
         this.satietyLimit = satietyLimit;
-        this.wastedSatietyPerStep = satietyLimit / 10; // hardcode
         this.reproductionChance = reproductionChance;
+        this.wastedSatietyPerStep = satietyLimit / 10; // hardcode
     }
 }

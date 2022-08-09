@@ -11,10 +11,12 @@ public abstract class Animal implements Movable, CanFeed {
     public float satiety;
     public boolean moved = false;
     public boolean isDead = false;
+    public float weight;
 
     public Animal(AnimalBase base) {
         this.id = IdGenerator.get();
         this.base = base;
+        this.weight = base.weight;
         this.satiety = base.satietyLimit;
     }
 

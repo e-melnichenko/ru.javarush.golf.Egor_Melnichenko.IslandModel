@@ -18,11 +18,10 @@ public class Location {
     public final HashMap<AnimalKind, ArrayList<Animal>> animalsMap = new HashMap<>();
     private final DirectionBunch availableDirections;
     public final Vegetation vegetation;
-//    todo config
-    private static final Class[] ANIMAL_GENERATION_LIST = new Class[]{
-        Buffalo.class, Caterpillar.class, Deer.class, Goat.class, Horse.class, Rabbit.class, Sheep.class,
-        Boar.class, Duck.class, Mouse.class,
-        Bear.class, Boa.class, Eagle.class, Fox.class, Wolf.class
+    private static final Animal[] ANIMAL_GENERATION_LIST = new Animal[]{
+        new Buffalo(), new Caterpillar(), new Deer(), new Goat(), new Horse(), new Rabbit(), new Sheep(),
+        new Boar(), new Duck(), new Mouse(),
+        new Bear(), new Boa(), new Eagle(), new Fox(), new Wolf()
     };
 
     public Location(Coords coords) {
@@ -55,16 +54,17 @@ public class Location {
         }
 
         vegetation = new Vegetation();
-        for (Class animal : ANIMAL_GENERATION_LIST) {
-            AnimalBase base = tryToCreateNewAnimal(animal).base;
-            int animalsCount = Chance.RANDOM.nextInt(base.maxOnLocation);
+        for (Animal animal : ANIMAL_GENERATION_LIST) {
+            int animalsCount = Chance.RANDOM.nextInt(animal.base.maxOnLocation);
             ArrayList<Animal> animalList = new ArrayList<>();
 
-            for (int i = 0; i < animalsCount; i++) {
-                animalList.add(tryToCreateNewAnimal(animal));
-            }
+//            if(animal.base == AnimalBase.BEAR) {
+                for (int i = 0; i < animalsCount; i++) {
+                    animalList.add(tryToCreateNewAnimal(animal));
+                }
+//            }
 
-            animalsMap.put(base.kind, animalList);
+            animalsMap.put(animal.base.kind, animalList);
         }
     }
 
@@ -73,6 +73,11 @@ public class Location {
             ArrayList<Animal> newAnimalList = new ArrayList<>();
 
             entry.getValue().forEach(animal -> {
+                if(animal.moved) {
+                    newAnimalList.add(animal);
+                    return;
+                }
+
                 Location newLocation = animal.move(this);
 //                    compare by link is okay
                 if (newLocation == this) {
@@ -130,16 +135,6 @@ public class Location {
             throw new RuntimeException(e);
         }
     }
-
-    public Animal tryToCreateNewAnimal(Class animalClass) {
-        try {
-            return (Animal) animalClass.getConstructor().newInstance();
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
-                 NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
     public void addAnimal(Animal animal) {
         AnimalKind animalKind = animal.base.kind;
