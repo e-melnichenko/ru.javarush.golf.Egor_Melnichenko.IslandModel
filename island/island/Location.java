@@ -2,8 +2,11 @@ package island.island;
 
 import island.Chance;
 import island.animal.*;
-import island.animal.herbivore.Caterpillar;
+import island.animal.herbivore.*;
+import island.animal.omnivore.Boar;
+import island.animal.omnivore.Duck;
 import island.animal.omnivore.Mouse;
+import island.animal.predator.*;
 import island.vegetation.Vegetation;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,9 +18,11 @@ public class Location {
     public final HashMap<AnimalKind, ArrayList<Animal>> animalsMap = new HashMap<>();
     private final DirectionBunch availableDirections;
     public final Vegetation vegetation;
-//    todo to config
+//    todo config
     private static final Class[] ANIMAL_GENERATION_LIST = new Class[]{
-            Caterpillar.class, Mouse.class
+        Buffalo.class, Caterpillar.class, Deer.class, Goat.class, Horse.class, Rabbit.class, Sheep.class,
+        Boar.class, Duck.class, Mouse.class,
+        Bear.class, Boa.class, Eagle.class, Fox.class, Wolf.class
     };
 
     public Location(Coords coords) {
@@ -50,19 +55,14 @@ public class Location {
         }
 
         vegetation = new Vegetation();
-// todo generation
         for (Class animal : ANIMAL_GENERATION_LIST) {
             AnimalBase base = tryToCreateNewAnimal(animal).base;
             int animalsCount = Chance.RANDOM.nextInt(base.maxOnLocation);
-//            System.out.println("animals count: " + animalsCount);
             ArrayList<Animal> animalList = new ArrayList<>();
 
             for (int i = 0; i < animalsCount; i++) {
-//                System.out.println("loop");
                 animalList.add(tryToCreateNewAnimal(animal));
             }
-
-//            System.out.println("animal list" + animalList);
 
             animalsMap.put(base.kind, animalList);
         }
@@ -106,14 +106,10 @@ public class Location {
             int childrenCount = list.size() / 2;
             Animal animalExample = list.get(0);
             for (int i = 0; i < childrenCount; i++) {
-                if(!hasFreeSpace(animalExample)) {
-//                    System.out.println("no reproduction");
-                    break;
-                };
+                if(!hasFreeSpace(animalExample)) break;
                 if (!Chance.isSuccess(animalExample.base.reproductionChance)) continue;
 
                 Animal newAnimal = tryToCreateNewAnimal(animalExample);
-//                System.out.println("was born: " + newAnimal);
                 list.add(newAnimal);
             }
         });

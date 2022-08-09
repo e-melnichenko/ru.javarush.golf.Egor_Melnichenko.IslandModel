@@ -16,10 +16,8 @@ default void hunt(Location location, Animal hunter)  {
             if(victim.isDead || !Chance.isSuccess(successHuntChance)) continue;
 
             eatAnimal(victim, hunter);
-//            System.out.println(this + " eat " + victim);
 
             if (!hunter.isHungry()) {
-//                System.out.println("loop exit: " + this);
                 break outerloop;
             }
         }

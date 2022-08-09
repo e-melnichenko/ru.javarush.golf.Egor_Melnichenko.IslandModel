@@ -40,11 +40,8 @@ public abstract class Animal implements Movable, CanFeed {
             Location newLocation = Island.AREA.getLocation(newCoords);
             if(newLocation.hasFreeSpace(this)) {
                 result = newLocation;
-            } else {
-//                System.out.println("throttle - max on location");
             }
         }
-
 
 //        System.out.println(this + " " +  fromLocation.coords.x + ":" + fromLocation.coords.y + "->" + result.coords.x + ":" + result.coords.y);
 

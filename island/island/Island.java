@@ -1,5 +1,6 @@
 package island.island;
 
+import island.animal.AnimalBase;
 import island.animal.AnimalKind;
 
 import java.util.*;
@@ -20,31 +21,30 @@ public class Island {
     }
 
     public void print() {
-//        todo print stats
-        Supplier<HashMap<AnimalKind, Integer>> supplier =
-                () -> new HashMap<>();
+        Supplier<HashMap<AnimalBase, Integer>> supplier =
+                HashMap::new;
 
-        BiConsumer<HashMap<AnimalKind, Integer>, AnimalKind> accumulator =
+        BiConsumer<HashMap<AnimalBase, Integer>, AnimalBase> accumulator =
                 (animalKindToInteger, item) -> {
                     animalKindToInteger.merge(item, 1, Integer::sum);
         };
-        BiConsumer<HashMap<AnimalKind, Integer>, HashMap<AnimalKind, Integer>> combiner =
-                (map1, map2) -> map1.putAll(map2);
+        BiConsumer<HashMap<AnimalBase, Integer>, HashMap<AnimalBase, Integer>> combiner =
+                HashMap::putAll;
 
         AtomicReference<Float> vegetationCount = new AtomicReference<>((float) 0);
 
-        HashMap<AnimalKind, Integer> statsMap = AREA.locationStream()
+        HashMap<AnimalBase, Integer> statsMap = AREA.locationStream()
                 .flatMap(location -> {
-                    vegetationCount.updateAndGet(v -> (float) (v + location.vegetation.value));
+                    vegetationCount.updateAndGet(v -> v + location.vegetation.value);
                     return location.animalsMap.values().stream();
                 })
                 .flatMap(ArrayList::stream)
-                .map(animal -> animal.base.kind)
+                .map(animal -> animal.base)
                 .collect(supplier, accumulator, combiner);
 
-        System.out.println("vegetation: " + vegetationCount);
-        System.out.println(statsMap);
-        System.out.println("----------------------------");
+        System.out.println("\uD83C\uDF3F: " + vegetationCount);
+        statsMap.forEach((key, value) -> System.out.print(key.icon + ": " + value + " "));
+        System.out.println("\n----------------------------");
     }
 
     public void start() {
@@ -61,12 +61,15 @@ public class Island {
         while (true) {
             try {
 //                todo God class or Runner or Runnable task ???
+                long startTime = System.currentTimeMillis();
                 moveAnimals();
                 reproduction();
                 feed();
                 clear();
                 growVegetation();
                 print();
+                long endTime = System.currentTimeMillis();
+                System.out.println("time: " + (endTime - startTime));
 
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

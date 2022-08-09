@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Vegetation {
     public float value;
-    private static final float MAX = 1000F;
+    private static final float MAX = 200F;
     private static final float GROW_STEP = 100F;
 
     public Vegetation() {
