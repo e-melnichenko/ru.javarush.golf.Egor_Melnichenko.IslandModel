@@ -1,0 +1,187 @@
+islandWidth: 3
+islandHeight: 3
+corePoolSize: 1 # couldn't do multithreading.
+lifeCycleDuration: 1000 # mills
+maxVegetationOnLocation: 200
+vegetationGrowPerStep: 200
+vegetationIcon: 🌿
+printStatsForDev: false
+animalProps:
+  Wolf:
+    kind: WOLF
+    icon: 🐺
+    speed: 3
+    weight: 50
+    maxOnLocation: 30
+    satietyLimit: 8
+    reproductionChance: 10
+    stepsCountWithoutFood: 10
+    menu:
+      HORSE: 10
+      DEER: 15
+      RABBIT: 60
+      MOUSE: 80
+      GOAT: 60
+      SHEEP: 70
+      BOAR: 15
+      BUFFALO: 10
+      DUCK: 40
+  Boa:
+    kind: BOA
+    icon: 🐍
+    speed: 1
+    weight: 15
+    maxOnLocation: 30
+    satietyLimit: 3
+    reproductionChance: 30
+    stepsCountWithoutFood: 10
+    menu:
+      FOX: 15
+      RABBIT: 20
+      MOUSE: 40
+      DUCK: 10
+  Fox:
+    kind: FOX
+    icon: 🦊
+    speed: 2
+    weight: 8
+    maxOnLocation: 30
+    satietyLimit: 2
+    reproductionChance: 30
+    stepsCountWithoutFood: 10
+    menu:
+      RABBIT: 70
+      MOUSE: 90
+      DUCK: 60
+      CATERPILLAR: 40
+  Bear:
+    kind: BEAR
+    icon: 🐻
+    speed: 2
+    weight: 500
+    maxOnLocation: 5
+    satietyLimit: 80
+    reproductionChance: 10
+    stepsCountWithoutFood: 10
+    menu:
+      BOA: 80
+      HORSE: 40
+      DEER: 80
+      RABBIT: 80
+      MOUSE: 90
+      GOAT: 70
+      SHEEP: 70
+      BOAR: 50
+      BUFFALO: 20
+      DUCK: 10
+  Eagle:
+    kind: EAGLE
+    icon: 🦅
+    speed: 3
+    weight: 6
+    maxOnLocation: 20
+    satietyLimit: 1
+    reproductionChance: 10
+    stepsCountWithoutFood: 10
+    menu:
+      FOX: 10
+      RABBIT: 90
+      MOUSE: 90
+      DUCK: 80
+  Horse:
+    kind: HORSE
+    icon: 🐎
+    speed: 4
+    weight: 400
+    maxOnLocation: 20
+    satietyLimit: 60
+    reproductionChance: 50
+    stepsCountWithoutFood: 10
+  Deer:
+    kind: DEER
+    icon: 🦌
+    speed: 4
+    weight: 300
+    maxOnLocation: 20
+    satietyLimit: 50
+    reproductionChance: 50
+    stepsCountWithoutFood: 10
+  Rabbit:
+    kind: RABBIT
+    icon: 🐇
+    speed: 2
+    weight: 2
+    maxOnLocation: 150
+    satietyLimit: 0.45
+    reproductionChance: 50
+    stepsCountWithoutFood: 10
+  Mouse:
+    kind: MOUSE
+    icon: 🐁
+    speed: 1
+    weight: 0.05
+    maxOnLocation: 500
+    satietyLimit: 0.01
+    reproductionChance: 80
+    stepsCountWithoutFood: 10
+    menu:
+      CATERPILLAR: 90
+  Goat:
+    kind: GOAT
+    icon: 🐐
+    speed: 3
+    weight: 60
+    maxOnLocation: 140
+    satietyLimit: 10
+    reproductionChance: 10
+    stepsCountWithoutFood: 10
+  Sheep:
+    kind: SHEEP
+    icon: 🐑
+    speed: 3
+    weight: 70
+    maxOnLocation: 140
+    satietyLimit: 15
+    reproductionChance: 10
+    stepsCountWithoutFood: 10
+  Boar:
+    kind: BOAR
+    icon: 🐗
+    speed: 2
+    weight: 400
+    maxOnLocation: 50
+    satietyLimit: 50
+    reproductionChance: 10
+    stepsCountWithoutFood: 10
+    menu:
+      MOUSE: 50
+      CATERPILLAR: 90
+  Buffalo:
+    kind: BUFFALO
+    icon: 🐃
+    speed: 3
+    weight: 700
+    maxOnLocation: 10
+    satietyLimit: 100
+    reproductionChance: 10
+    stepsCountWithoutFood: 10
+  Duck:
+    kind: DUCK
+    icon: 🦆
+    speed: 4
+    weight: 1
+    maxOnLocation: 200
+    satietyLimit: 0.15
+    reproductionChance: 10
+    stepsCountWithoutFood: 10
+    menu:
+      CATERPILLAR: 90
+  Caterpillar:
+    kind: CATERPILLAR
+    icon: 🐛
+    speed: 0
+    weight: 0.01
+    maxOnLocation: 1000
+    satietyLimit: 0
+    reproductionChance: 99
+    stepsCountWithoutFood: 10
