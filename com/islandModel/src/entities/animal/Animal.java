@@ -30,9 +30,9 @@ public abstract class Animal implements Movable, CanFeed {
     }
 
     private void safeMove(Location fromLocation, Location[][] area) {
-
-        fromLocation.getLock().lock();
         if(moved) return;
+        
+        fromLocation.getLock().lock();
 
         try {
             Location result = fromLocation;

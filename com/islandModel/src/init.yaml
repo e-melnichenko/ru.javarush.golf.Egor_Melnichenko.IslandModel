@@ -14,7 +14,7 @@ animalProps:
     weight: 50
     maxOnLocation: 30
     satietyLimit: 8
-    reproductionChance: 10
+    reproductionChance: 1
     stepsCountWithoutFood: 10
     menu:
       HORSE: 10
@@ -33,7 +33,7 @@ animalProps:
     weight: 15
     maxOnLocation: 30
     satietyLimit: 3
-    reproductionChance: 30
+    reproductionChance: 1
     stepsCountWithoutFood: 10
     menu:
       FOX: 15
@@ -47,7 +47,7 @@ animalProps:
     weight: 8
     maxOnLocation: 30
     satietyLimit: 2
-    reproductionChance: 30
+    reproductionChance: 1
     stepsCountWithoutFood: 10
     menu:
       RABBIT: 70
@@ -61,7 +61,7 @@ animalProps:
     weight: 500
     maxOnLocation: 5
     satietyLimit: 80
-    reproductionChance: 10
+    reproductionChance: 1
     stepsCountWithoutFood: 10
     menu:
       BOA: 80
@@ -81,7 +81,7 @@ animalProps:
     weight: 6
     maxOnLocation: 20
     satietyLimit: 1
-    reproductionChance: 10
+    reproductionChance: 1
     stepsCountWithoutFood: 10
     menu:
       FOX: 10
@@ -95,7 +95,7 @@ animalProps:
     weight: 400
     maxOnLocation: 20
     satietyLimit: 60
-    reproductionChance: 50
+    reproductionChance: 5
     stepsCountWithoutFood: 10
   Deer:
     kind: DEER
@@ -104,7 +104,7 @@ animalProps:
     weight: 300
     maxOnLocation: 20
     satietyLimit: 50
-    reproductionChance: 50
+    reproductionChance: 5
     stepsCountWithoutFood: 10
   Rabbit:
     kind: RABBIT
@@ -113,7 +113,7 @@ animalProps:
     weight: 2
     maxOnLocation: 150
     satietyLimit: 0.45
-    reproductionChance: 50
+    reproductionChance: 1
     stepsCountWithoutFood: 10
   Mouse:
     kind: MOUSE
@@ -122,7 +122,7 @@ animalProps:
     weight: 0.05
     maxOnLocation: 500
     satietyLimit: 0.01
-    reproductionChance: 80
+    reproductionChance: 50
     stepsCountWithoutFood: 10
     menu:
       CATERPILLAR: 90
@@ -133,7 +133,7 @@ animalProps:
     weight: 60
     maxOnLocation: 140
     satietyLimit: 10
-    reproductionChance: 10
+    reproductionChance: 1
     stepsCountWithoutFood: 10
   Sheep:
     kind: SHEEP
@@ -142,7 +142,7 @@ animalProps:
     weight: 70
     maxOnLocation: 140
     satietyLimit: 15
-    reproductionChance: 10
+    reproductionChance: 1
     stepsCountWithoutFood: 10
   Boar:
     kind: BOAR
@@ -151,7 +151,7 @@ animalProps:
     weight: 400
     maxOnLocation: 50
     satietyLimit: 50
-    reproductionChance: 10
+    reproductionChance: 1
     stepsCountWithoutFood: 10
     menu:
       MOUSE: 50
@@ -163,7 +163,7 @@ animalProps:
     weight: 700
     maxOnLocation: 10
     satietyLimit: 100
-    reproductionChance: 10
+    reproductionChance: 1
     stepsCountWithoutFood: 10
   Duck:
     kind: DUCK
@@ -172,7 +172,7 @@ animalProps:
     weight: 1
     maxOnLocation: 200
     satietyLimit: 0.15
-    reproductionChance: 10
+    reproductionChance: 1
     stepsCountWithoutFood: 10
     menu:
       CATERPILLAR: 90
